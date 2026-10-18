@@ -53,3 +53,9 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# PSL1GHT generated shit
+build/
+*.self
+*.pkg
+EBOOT.BIN
