@@ -72,6 +72,8 @@ void TTF_to_Bitmap(u8 chr, u8 * bitmap, short *w, short *h, short *y_correction)
 	else if (chr == 0x8E) unicode_cp = 0x00DC; // Ü
 	else if (chr == 0x8F) unicode_cp = 0x00D1; // Ñ
 	
+	else if (chr == 0x90) unicode_cp = 0x00E3; // ã
+	
     if(FT_Load_Char(face, unicode_cp, FT_LOAD_RENDER )) {(*w) = 0; return;}
     
     int n, m, ww;
@@ -258,6 +260,7 @@ void utf8_to_cp1251(const char* src, char* dest, size_t max_len)
 	            case 0x9A: dest[j++] = (char)0x8D; i += 2; continue; // Ú
 	            case 0x9C: dest[j++] = (char)0x8E; i += 2; continue; // Ü
 	            case 0x91: dest[j++] = (char)0x8F; i += 2; continue; // Ñ
+	            case 0xA3: dest[j++] = (char)0x90; i += 2; continue; // ã
 	        }
 	    }
 
@@ -329,4 +332,16 @@ void DrawTextAligned(int wrap, float x1, float x2, float y, int align, u32 tc, i
     else x = x2 - width;
 
 	DrawFString(wrap, x, y, tc, bw, size, bufferz);
+}
+
+void DrawFStringC(int wrap, float x, float y, u32 textColor, int BW, int w, int size, const char *fmt, ...)
+{
+    char buffer[1024];
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(buffer, sizeof(buffer), fmt, args);
+    va_end(args);
+    
+    int fwidth = GetFontWidth(buffer, w);
+	DrawFString(wrap, (x-fwidth)/2, y, textColor, BW, size, buffer);
 }

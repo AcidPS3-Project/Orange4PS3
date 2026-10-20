@@ -5,6 +5,10 @@
 
 #include "drawing.h"
 #include "random.h"
+#include "core.h"
+
+bool bullets[] = {true, false, false, false, false, false};
+size_t bulletn = sizeof(bullets) / sizeof(bullets[0]);
 
 bool old_control_left = false;
 bool old_control_right = false;
@@ -20,7 +24,7 @@ int main(int argc, const char* argv[])
 	
 	srand(time(NULL));
 	tiny3d_Init(6*1024*1024);
-	tiny3d_UserViewport(1, 0, 0, (float)(Video_Resolution.width / 916.0f), (float)(Video_Resolution.height / 582.0f),
+	tiny3d_UserViewport(1, 0, 0, (float)(Video_Resolution.width / 854.0f), (float)(Video_Resolution.height / 480.0f),
 		(float)(Video_Resolution.width / 1920.0f), (float)(Video_Resolution.height / 1080.0f));
 	
 	sysModuleLoad(SYSMODULE_PNGDEC);
@@ -33,8 +37,6 @@ int main(int argc, const char* argv[])
 	ioPadInit(7);
     LoadTexture();
     
-    //PlayBGM(0, 0);
-
     while(1)
     {
 		sysUtilCheckCallback();
@@ -58,6 +60,53 @@ int main(int argc, const char* argv[])
 
 				bool control_up = paddata.BTN_UP || paddata.ANA_L_V < 80;
 				bool control_down = paddata.BTN_DOWN || paddata.ANA_L_V > 176;
+				
+				switch(GameSCR)
+				{
+					case SCR_INIT:
+					{
+						if(paddata.BTN_START && !oldpad.BTN_START) GameSCR = SCR_LOGO;
+						break;
+					}
+					case SCR_LOGO:
+					{
+						static int t = 0;
+						t++;
+						if(t>120)
+						{
+							GameSCR = SCR_MENU;
+							PlayBGM(3, 1);
+						}
+						break;
+					}
+					case SCR_MENU:
+					{
+						if(paddata.BTN_START && !oldpad.BTN_START)
+						{
+							text_speech = 0;
+							text_type = RandRange(0, 2);
+							max_dial = 4;
+							GameSCR = SCR_CUTS;
+							PlayBGM(2, 1);
+						}
+						break;
+					}
+					case SCR_CUTS:
+					{
+						if(paddata.BTN_CROSS && !oldpad.BTN_CROSS)
+						{
+							text_speech++;
+							if(text_speech>max_dial-1)
+							{
+								GameSCR = SCR_GAME;
+								shuffle(bullets, bulletn);
+								PlayBGM(0, 1);
+							}
+						}
+						break;
+					}
+					default: break;
+				}
 				
 				old_control_left = control_left;
 				old_control_right = control_right;

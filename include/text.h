@@ -16,5 +16,6 @@ void DrawWrappedText(float x, float y, float line_h, int max_chars, const char *
 void utf8_to_cp1251(const char* src, char* dest, size_t max_len);
 void DrawFString(int wrap, float x, float y, u32 textColor, int BW, int size, const char *fmt, ...);
 void DrawTextAligned(int wrap, float x1, float x2, float y, int align, u32 tc, int bw, int fsize, int size, const char *text, ...);
+void DrawFStringC(int wrap, float x, float y, u32 textColor, int BW, int w, int size, const char *fmt, ...);
 
 #endif

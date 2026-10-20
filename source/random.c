@@ -15,6 +15,13 @@ int fps = 0;
 static int frames = 0;
 static u64 last_time = 0;
 
+int text_speech = 0;
+int text_type = 0;
+int dialogue = 0;
+int max_dial = 3;
+
+bool shuffling = false;
+
 void UpdateFPS()
 {
     u64 now = sysGetSystemTime();
@@ -39,7 +46,10 @@ void init_bgm()
 		bgm_end[z] = sex;
 	}
 	
-	bgm[0] = MUS_DIR ".ogg";
+	bgm[0] = MUS_DIR "jerad.mp3";
+	bgm[1] = MUS_DIR "jerad2.mp3";
+	bgm[2] = MUS_DIR "tony.mp3";
+	bgm[3] = MUS_DIR "tony2.mp3";
 }
 
 int LoadSFX(SoundEffect *sfx, const void *data, int size)
@@ -60,7 +70,15 @@ int LoadSFX(SoundEffect *sfx, const void *data, int size)
 
 void init_sfx()
 {
-	LoadSFX(&sfx_majora, majora_bin, majora_bin_size);
+	LoadSFX(&sfx_cylinder, cylinder_bin, cylinder_bin_size);
+	LoadSFX(&sfx_grab, grab_bin, grab_bin_size);
+	LoadSFX(&sfx_gunshot, gunshot_bin, gunshot_bin_size);
+	LoadSFX(&sfx_gunshot2, gunshot2_bin, gunshot2_bin_size);
+	LoadSFX(&sfx_incinerate, incinerate_bin, incinerate_bin_size);
+	LoadSFX(&sfx_set, set_bin, set_bin_size);
+	LoadSFX(&sfx_shove, shove_bin, shove_bin_size);
+	LoadSFX(&sfx_trigger, trigger_bin, trigger_bin_size);
+	LoadSFX(&sfx_triggerback, triggerback_bin, triggerback_bin_size);
 }
 
 int RandRange(int min, int max)
@@ -115,6 +133,19 @@ void StopSFX(SoundEffect *sfx)
 void Load_PNG()
 {
 	pngLoadFromBuffer(heat_bin, heat_bin_size, &spritesheet[0]);
+	pngLoadFromBuffer(bg_bin, bg_bin_size, &spritesheet[1]);
+	pngLoadFromBuffer(prisonorange_bin, prisonorange_bin_size, &spritesheet[2]);
+	pngLoadFromBuffer(prisonorange2_bin, prisonorange2_bin_size, &spritesheet[3]);
+	pngLoadFromBuffer(bananagunbg_bin, bananagunbg_bin_size, &spritesheet[4]);
+	pngLoadFromBuffer(bananacylinder_bin, bananacylinder_bin_size, &spritesheet[5]);
+	pngLoadFromBuffer(titlebg_bin, titlebg_bin_size, &spritesheet[6]);
+	pngLoadFromBuffer(table_bin, table_bin_size, &spritesheet[7]);
+	pngLoadFromBuffer(orangebody_bin, orangebody_bin_size, &spritesheet[8]);
+	pngLoadFromBuffer(bananagun_bin, bananagun_bin_size, &spritesheet[9]);
+	pngLoadFromBuffer(endbg_bin, endbg_bin_size, &spritesheet[10]);
+	pngLoadFromBuffer(sidewall_bin, sidewall_bin_size, &spritesheet[11]);
+	pngLoadFromBuffer(sidewall2_bin, sidewall2_bin_size, &spritesheet[12]);
+	//pngLoadFromBuffer(_bin, _bin_size, &spritesheet[]);
 }
 
 void Initialize()

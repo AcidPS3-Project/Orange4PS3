@@ -5,6 +5,15 @@
 
 extern u32 *texture_pointer;
 
+#define SCR_INIT 0
+#define SCR_LOGO 1
+#define SCR_MENU 2
+#define SCR_CUTS 3
+#define SCR_GAME 4
+#define SCR_ENDS 5
+
+extern int GameSCR;
+
 void DrawRectangle2D(float x, float y, float w, float h, u32 rgba, float l);
 void DrawBackground2D(u32 rgba, float l);
 

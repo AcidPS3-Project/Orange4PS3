@@ -7,6 +7,7 @@ TITLE		:=	Orange Roulette
 APPID		:=	ORANGEPS3
 CONTENTID	:=	HP0031-$(APPID)_00-0000000000000000
 
+SFOXML		:=	param/sfo.xml
 ICON0       :=  param/ICON0.PNG
 PKGFILES	:=	files
 

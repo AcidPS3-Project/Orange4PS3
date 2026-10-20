@@ -3,6 +3,13 @@
 
 #include <pngdec/pngdec.h>
 
+extern int text_speech;
+extern int text_type;
+extern int dialogue;
+extern int max_dial;
+
+extern bool shuffling;
+
 typedef struct
 {
     short *pcm;
@@ -12,12 +19,20 @@ typedef struct
     int voice;
 } SoundEffect;
 
-SoundEffect sfx_majora;
+SoundEffect sfx_cylinder;
+SoundEffect sfx_grab;
+SoundEffect sfx_gunshot;
+SoundEffect sfx_gunshot2;
+SoundEffect sfx_incinerate;
+SoundEffect sfx_set;
+SoundEffect sfx_shove;
+SoundEffect sfx_trigger;
+SoundEffect sfx_triggerback;
 
-#define BGM_LIST 10
+#define BGM_LIST 4
 #define MUS_DIR "/dev_hdd0/game/ORANGEPS3/USRDIR/mus/"
 
-#define TOTAL_SHEETS 2
+#define TOTAL_SHEETS 40
 pngData spritesheet[TOTAL_SHEETS];
 u32 sprite_off[TOTAL_SHEETS];
 
