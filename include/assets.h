@@ -15,6 +15,16 @@
 #include "endbg_bin.h"
 #include "sidewall_bin.h"
 #include "sidewall2_bin.h"
+#include "orange_bin.h"
+#include "orangelhand_bin.h"
+#include "orange_f1_bin.h"
+#include "orange_f2_bin.h"
+#include "orange_f3_bin.h"
+#include "orange_f4_bin.h"
+#include "orange_f5_bin.h"
+#include "orange_f6_bin.h"
+#include "orange_f7_bin.h"
+#include "orange_fend_bin.h"
 
 //IMPORT SFX
 #include "cylinder_bin.h"

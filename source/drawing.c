@@ -116,7 +116,26 @@ const char* gameover_text[] =
 	"The horror ...",
 	"The horticulture ...",
 	"The horror ...",
-	"The horticulture."
+	"The horticulture.",
+	
+	// additional ones :eyes:
+	"Sometimes I wonder ...",
+	"When this purgatory will end.",
+	"Probably tomorrow ...",
+	"Probably never.",
+	"Life doesn't make sense now.",
+	"You just repeat ...",
+	"Repeat ...",
+	"And repeat.",
+	"The insanity is ...",
+	"Doing the same thing ...",
+	"Expecting ...",
+	"A different outcome.",
+	"How long we have been here?",
+	"It's probably been so long ...",
+	"That I question my existence.",
+	"I'm scared.",
+	"(JUST TO AVOID CRASH IGNORE THAT)"
 };
 
 int GameSCR = 0;
@@ -317,8 +336,18 @@ void drawHeat()
     if (sprite_y < -0.0f) sprite_y = 480.0f;
     
 	SetTexture(0);
-	DrawFull(0, sprite_y-480, 854, 480, -10, 0xffffffcc);
-	DrawFull(0, sprite_y, 854, 480, -10, 0xffffffcc);
+	DrawFull(0, sprite_y-480, 854, 480, -20, 0xffffffcc);
+	DrawFull(0, sprite_y, 854, 480, -20, 0xffffffcc);
+}
+
+void DrawFade(float fade_alpha)
+{
+    if(fade_alpha <= 0.0f) return;
+
+    u32 alpha = (u32)fade_alpha;
+    u32 color = 0xffffff00 | alpha;
+	
+	DrawBackground2D(color, -19);
 }
 
 void drawScene()
@@ -374,7 +403,9 @@ void drawScene()
 			DrawFString(0, 0, 154, c_orange, 0, 28, "ORANGE ROULETTE");
 			DrawFString(0, 0, 384, c_orange, 0, 28, "{PRESS START TO PLAY}");
 			SetFontSize(12, 14);
-			DrawFString(0, 0, 192, c_orange, 0, 14, "(PS3 Edition / V0.0)");
+			DrawFString(0, 0, 192, c_orange, 0, 14, "(PS3 Edition / V0.1)");
+			DrawFString(0, 0, 220, c_orange, 0, 14, "What's New?");
+			DrawFString(0, 0, 240, c_orange, 0, 14, "You can technically lose now lmao");
 			SetFontAutoCenter(0);
 			DrawFString(0, 10, 450, c_orange, 0, 28, "original game by mikey houser");
 			break;
@@ -394,12 +425,15 @@ void drawScene()
 			else if(dialogue == 5) text = dialogue_6[text_speech+(max_dial*text_type)];
 			else if(dialogue == 6) text = dialogue_7[text_speech];
 			
-			DrawFStringC(0, 666, 167, c_orange, 0, 24, 28, text);
-			DrawFString(0, 10, 438, c_white, 0, 28, "(PResS X to ContinUe)");
+			u32 colort = 0xffaf2200 | (u32)tfade_alpha;
+			DrawFStringC(0, 666, 167, colort, 0, 24, 28, text);
+			colort = 0xffffff00 | (u32)tfade_alpha;
+			DrawFString(0, 10, 438, colort, 0, 28, "(PResS X to ContinUe)");
 			break;
 		}
 		case SCR_GAME:
 		{
+			static int tg = 0;
 			if(shuffling)
 			{
 				static int t = 0;
@@ -417,24 +451,56 @@ void drawScene()
 			}
 			else
 			{
-				SetTexture(1);
-				DrawFull(0, 0, 854, 480, 10, 0xffffffff);
-				SetTexture(11);
-				DrawFull(768, 5, 106, 460, 0, 0xffffffff);
-				SetTexture(12);
-				DrawFull(-20, 5, 106, 460, 0, 0xffffffff);
-				SetTexture(7);
-				DrawFull(-10, 400, 874, 120, -1, 0xffffffff);
+				SetTexture(1); DrawFull(0, 0, 854, 480, 10, 0xffffffff);
+				
+				SetTexture(8); 
+				DrawFull(120, 220, 139, 202, 2, 0xffffffff);
+				DrawFull(740, 220, -139, 202, 2, 0xffffffff);
+				
+				SetTexture(13); 
+				DrawFull(102, 70, 187, 177, 1, 0xffffffff);
+				DrawFull(758, 70, -187, 177, 1, 0xffffffff);
+				
+				SetTexture(11); DrawFull(768, 5, 106, 460, 0, 0xffffffff);
+				SetTexture(12); DrawFull(-20, 5, 106, 460, 0, 0xffffffff);
+				SetTexture(7); DrawFull(-10, 400, 874, 120, -1, 0xffffffff);
+				
+				SetTexture(14);
+				DrawSprite2D(0, 120, 380, 73, 82, 73, 82, 365, 164, -2, c_white);
+				DrawSprite2D(0, 740, 380, -73, 82, 73, 82, 365, 164, -2, c_white);
+				
+				SetFontSize(24, 28);
+				SetFontAutoCenter(1);
+				DrawFString(0, 0, 318, c_black, 1, 28, "Nothing to play right now.");
+				DrawFString(0, 0, 348, c_black, 1, 28, "SQUARE - Shuffle, CROSS - Shoot");
+				SetFontAutoCenter(0);
 			}
+			
+			if(!controlling)
+			{
+				tg++;
+				if(tg>67)
+				{
+					char buffer[1024];
+					if(fade_alpha < 241.9f) fade_alpha+=17.7f;
+					else if(fade_alpha != 254.9f) fade_alpha=254.9f;
+					DrawFade(fade_alpha);
+					SetFontAutoCenter(1);
+					u32 colort = 0x00000000 | (u32)tfade_alpha;
+					SetFontColor(colort, 0x00000000);
+					snprintf(buffer, sizeof(buffer), gameover_text[text_speech+(4*text_type)]);
+					DrawFormatString(0, 180, buffer);
+					SetFontAutoCenter(0);
+				}
+			}
+			else tg = 0;
+			
 			drawHeat();
+			
+			SetFontSize(12, 14);
+			DrawFString(0, 0, 0, c_orange, 0, 14, "ORANGE ROULETTE: PS3 EDITION (V0.1) [RECREATED BY ACIDNT3.1 PRODUCTIONS]");
 		}
 		default: break;
-	}
-	
-	if(GameSCR!=SCR_MENU)
-	{
-		SetFontSize(12, 14);
-		DrawFString(0, 0, 0, c_orange, 0, 14, "ORANGE ROULETTE: PS3 EDITION (V0.0)");
 	}
 }
 

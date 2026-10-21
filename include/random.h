@@ -32,7 +32,23 @@ SoundEffect sfx_triggerback;
 #define BGM_LIST 4
 #define MUS_DIR "/dev_hdd0/game/ORANGEPS3/USRDIR/mus/"
 
-#define TOTAL_SHEETS 40
+#define TOTAL_SHEETS 100
+
+#define ORANGE_PLAYER 0
+#define ORANGE_USUAL 1
+#define ORANGE_CRYING 2
+#define ORANGE_COCKY 3
+#define ORANGE_LOBOTOMIZED 4
+#define ORANGE_CYCLOPE 5
+#define ORANGE_WTF 6
+
+extern bool controlling;
+extern bool can_shuffle;
+
+extern float fade_alpha;
+extern float tfade_alpha;
+extern bool tfade;
+
 pngData spritesheet[TOTAL_SHEETS];
 u32 sprite_off[TOTAL_SHEETS];
 

@@ -19,8 +19,16 @@ int text_speech = 0;
 int text_type = 0;
 int dialogue = 0;
 int max_dial = 3;
+int opponent = ORANGE_PLAYER;
+
+bool controlling = true;
+bool can_shuffle = true;
 
 bool shuffling = false;
+
+float fade_alpha = 0.0f;
+float tfade_alpha = 0.0f;
+bool tfade = false;
 
 void UpdateFPS()
 {
@@ -145,6 +153,16 @@ void Load_PNG()
 	pngLoadFromBuffer(endbg_bin, endbg_bin_size, &spritesheet[10]);
 	pngLoadFromBuffer(sidewall_bin, sidewall_bin_size, &spritesheet[11]);
 	pngLoadFromBuffer(sidewall2_bin, sidewall2_bin_size, &spritesheet[12]);
+	pngLoadFromBuffer(orange_bin, orange_bin_size, &spritesheet[13]);
+	pngLoadFromBuffer(orangelhand_bin, orangelhand_bin_size, &spritesheet[14]);
+	pngLoadFromBuffer(orange_f1_bin, orange_f1_bin_size, &spritesheet[15]);
+	pngLoadFromBuffer(orange_f2_bin, orange_f2_bin_size, &spritesheet[16]);
+	pngLoadFromBuffer(orange_f3_bin, orange_f3_bin_size, &spritesheet[17]);
+	pngLoadFromBuffer(orange_f4_bin, orange_f4_bin_size, &spritesheet[18]);
+	pngLoadFromBuffer(orange_f5_bin, orange_f5_bin_size, &spritesheet[19]);
+	pngLoadFromBuffer(orange_f6_bin, orange_f6_bin_size, &spritesheet[20]);
+	pngLoadFromBuffer(orange_f7_bin, orange_f7_bin_size, &spritesheet[21]);
+	pngLoadFromBuffer(orange_fend_bin, orange_fend_bin_size, &spritesheet[22]);
 	//pngLoadFromBuffer(_bin, _bin_size, &spritesheet[]);
 }
 

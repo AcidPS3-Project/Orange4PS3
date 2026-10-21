@@ -17,7 +17,19 @@ void shuffle(_Bool *array, size_t n)
         }
     }
     
-    printf("Shuffled array:\n");
+    printf("Shuffled array: ");
     for (size_t z = 0; z < n; z++) printf("%d ", array[z]);
     printf("\n");
+}
+
+void shoot_gun(_Bool *array, size_t n)
+{
+	int temp = array[0];
+
+	for (int i = 0; i < n - 1; i++) array[i] = array[i + 1];
+
+	array[n - 1] = temp;
+	printf("Array: ");
+	for (size_t z = 0; z < n; z++) printf("%d ", array[z]);
+	printf("\n");
 }

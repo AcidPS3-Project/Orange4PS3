@@ -86,6 +86,7 @@ int main(int argc, const char* argv[])
 							text_speech = 0;
 							text_type = RandRange(0, 2);
 							max_dial = 4;
+							tfade = true;
 							GameSCR = SCR_CUTS;
 							PlayBGM(2, 1);
 						}
@@ -93,17 +94,90 @@ int main(int argc, const char* argv[])
 					}
 					case SCR_CUTS:
 					{
-						if(paddata.BTN_CROSS && !oldpad.BTN_CROSS)
+						if(tfade)
 						{
-							text_speech++;
-							if(text_speech>max_dial-1)
+							if(tfade_alpha < 241.9f) tfade_alpha+=10.7f;
+							else if(tfade_alpha != 254.9f) tfade_alpha=254.9f;
+						}
+						else
+						{
+							if(tfade_alpha > 9.0f) tfade_alpha-=10.7f;
+							else if(tfade_alpha != 0.0f)
 							{
-								GameSCR = SCR_GAME;
-								shuffle(bullets, bulletn);
-								PlayBGM(0, 1);
+								tfade_alpha=0.0f;
+								tfade = true;
+								if(text_speech>=max_dial-1)
+								{
+									GameSCR = SCR_GAME;
+									text_speech = 0;
+									shuffle(bullets, bulletn);
+									controlling = true;
+									can_shuffle = true;
+									PlayBGM(0, 1);
+								}
+								else text_speech++;
 							}
 						}
+						
+						if(paddata.BTN_CROSS && !oldpad.BTN_CROSS && tfade) tfade = false;
 						break;
+					}
+					case SCR_GAME:
+					{
+						if(!shuffling && controlling)
+						{
+							if(paddata.BTN_CROSS && !oldpad.BTN_CROSS)
+							{
+								text_type = RandRange(0, 5);
+								if(bullets[0])
+								{
+									PlaySFX(&sfx_gunshot);
+									controlling = false;
+								}
+								else
+								{
+									PlaySFX(&sfx_trigger);
+									shoot_gun(bullets, bulletn);
+								}
+							}
+							if(paddata.BTN_SQUARE && !oldpad.BTN_SQUARE && can_shuffle)
+							{
+								can_shuffle = false;
+								shuffle(bullets, bulletn);
+							}
+						}
+						else if(!controlling)
+						{
+							if(fade_alpha >= 250.0f)
+							{
+								if(tfade)
+								{
+									if(tfade_alpha < 241.9f) tfade_alpha+=10.7f;
+									else if(tfade_alpha != 254.9f) tfade_alpha=254.9f;
+								}
+								else
+								{
+									if(tfade_alpha > 9.0f) tfade_alpha-=10.7f;
+									else if(tfade_alpha != 0.0f)
+									{
+										tfade_alpha=0.0f;
+										tfade = true;
+										if(text_speech>=3)
+										{
+											text_speech = 0;
+											fade_alpha = 0.0f;
+											shuffle(bullets, bulletn);
+											controlling = true;
+											can_shuffle = true;
+										}
+										else text_speech++;
+									}
+								}
+								
+								if(paddata.BTN_CROSS && !oldpad.BTN_CROSS && tfade) tfade = false;
+							}
+							else if(paddata.BTN_SELECT && !oldpad.BTN_SELECT) text_type = RandRange(6, 9);
+						}
 					}
 					default: break;
 				}

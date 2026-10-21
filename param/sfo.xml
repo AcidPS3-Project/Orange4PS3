@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <sfo>
 	<value name="APP_VER" type="string">
-		00.00
+		00.10
 	</value>
 	<value name="ATTRIBUTE" type="integer">
 		0
@@ -16,7 +16,7 @@
 		This application was created with the official non-official SDK called psl1ght, for more information visit http://www.psl1ght.com/ . This is in no way associated with Sony Computer Entertainment Inc., please do not contact them for help, they will not be able to provide it.
 	</value>
 	<value name="PARENTAL_LEVEL" type="integer">
-		0
+		7
 	</value>
 	<value name="PS3_SYSTEM_VER" type="string">
 		01.8000
@@ -34,6 +34,6 @@
 		ORANGEPS3
 	</value>
 	<value name="VERSION" type="string">
-		00.00
+		00.10
 	</value>
 </sfo>
