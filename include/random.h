@@ -42,12 +42,28 @@ SoundEffect sfx_triggerback;
 #define ORANGE_CYCLOPE 5
 #define ORANGE_WTF 6
 
+#define COM_ACT_NONE 0
+#define COM_ACT_SHOOT 1
+#define COM_ACT_SHOOT_OTHER 2
+#define COM_ACT_SHUFFLE 3
+
+extern int com_action;
+
 extern bool controlling;
 extern bool can_shuffle;
+extern bool can_shoot_other;
+extern bool com_can_shuffle;
 
 extern float fade_alpha;
 extern float tfade_alpha;
 extern bool tfade;
+
+extern bool lost_game;
+extern bool won_game;
+
+extern int player_anim;
+extern int opponent_anim;
+extern int opponent;
 
 pngData spritesheet[TOTAL_SHEETS];
 u32 sprite_off[TOTAL_SHEETS];

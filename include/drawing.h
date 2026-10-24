@@ -12,6 +12,31 @@ extern u32 *texture_pointer;
 #define SCR_GAME 4
 #define SCR_ENDS 5
 
+typedef struct
+{
+    const int *frames;
+    int count;
+    int position;
+    int timer;
+    int delay;
+    int loop;
+    int current_frame;
+} FaceAnimation;
+
+extern const int anim_lookdown[15];
+extern const int anim_lookother[6];
+extern const int anim_scared[6];
+extern const int anim_click[7];
+extern const int anim_shoot[5];
+extern const int anim_dead[9];
+extern const int anim_killed[9];
+
+extern FaceAnimation playerFace;
+extern FaceAnimation opponentFace;
+
+void SetFaceAnimation(FaceAnimation *a, const int *frames, int count, int delay, int loop);
+void UpdateFaceAnimation(FaceAnimation *a);
+
 extern int GameSCR;
 
 void DrawRectangle2D(float x, float y, float w, float h, u32 rgba, float l);

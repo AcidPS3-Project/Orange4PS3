@@ -15,6 +15,8 @@ int fps = 0;
 static int frames = 0;
 static u64 last_time = 0;
 
+int com_action = COM_ACT_NONE;
+
 int text_speech = 0;
 int text_type = 0;
 int dialogue = 0;
@@ -23,12 +25,20 @@ int opponent = ORANGE_PLAYER;
 
 bool controlling = true;
 bool can_shuffle = true;
+bool can_shoot_other = true;
+bool com_can_shuffle = true;
+
+int player_anim = 22;
+int opponent_anim = 7;
 
 bool shuffling = false;
 
 float fade_alpha = 0.0f;
 float tfade_alpha = 0.0f;
 bool tfade = false;
+
+bool lost_game = false;
+bool won_game = false;
 
 void UpdateFPS()
 {

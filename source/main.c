@@ -15,6 +15,8 @@ bool old_control_right = false;
 bool old_control_up = false;
 bool old_control_down = false;
 
+int bullets_shooted = 0;
+
 int main(int argc, const char* argv[])
 {
 	padInfo padinfo;
@@ -108,12 +110,25 @@ int main(int argc, const char* argv[])
 								tfade = true;
 								if(text_speech>=max_dial-1)
 								{
-									GameSCR = SCR_GAME;
-									text_speech = 0;
-									shuffle(bullets, bulletn);
-									controlling = true;
-									can_shuffle = true;
-									PlayBGM(0, 1);
+									if(dialogue==6) GameSCR = SCR_ENDS;
+									else
+									{
+										opponent = dialogue + 1;
+										
+										GameSCR = SCR_GAME;
+										text_speech = 0;
+										bullets_shooted = 0;
+										shuffle(bullets, bulletn);
+										controlling = true;
+										can_shuffle = true;
+										com_can_shuffle = true;
+										won_game = false;
+										can_shoot_other = true;
+										lost_game = false;
+										PlayBGM(0, 1);
+										
+										SetFaceAnimation(&playerFace, anim_lookdown, sizeof(anim_lookdown) / sizeof(anim_lookdown[0]), 5, 0);
+									}
 								}
 								else text_speech++;
 							}
@@ -124,29 +139,62 @@ int main(int argc, const char* argv[])
 					}
 					case SCR_GAME:
 					{
+						if(!shuffling)
+						{
+							UpdateFaceAnimation(&playerFace);
+							player_anim = playerFace.current_frame;
+						}
+						
 						if(!shuffling && controlling)
 						{
 							if(paddata.BTN_CROSS && !oldpad.BTN_CROSS)
 							{
+								can_shoot_other = true;
 								text_type = RandRange(0, 5);
+								controlling = false;
+								bullets_shooted++;
 								if(bullets[0])
 								{
+									SetFaceAnimation(&playerFace, anim_dead, sizeof(anim_dead) / sizeof(anim_dead[0]), 1, 0);
 									PlaySFX(&sfx_gunshot);
-									controlling = false;
+									lost_game = true;
 								}
 								else
 								{
+									SetFaceAnimation(&playerFace, anim_click, sizeof(anim_click) / sizeof(anim_click[0]), 5, 0);
 									PlaySFX(&sfx_trigger);
 									shoot_gun(bullets, bulletn);
 								}
 							}
-							if(paddata.BTN_SQUARE && !oldpad.BTN_SQUARE && can_shuffle)
+							if(paddata.BTN_SQUARE && !oldpad.BTN_SQUARE && can_shuffle && can_shoot_other)
 							{
 								can_shuffle = false;
 								shuffle(bullets, bulletn);
 							}
+							if(paddata.BTN_CIRCLE && !oldpad.BTN_CIRCLE && can_shoot_other)
+							{
+								can_shoot_other = false;
+								if(bullets[0])
+								{
+									SetFaceAnimation(&playerFace, anim_killed, sizeof(anim_killed) / sizeof(anim_killed[0]), 6, 0);
+									controlling = false;
+									printf("I lost. Ouchie\n");
+									text_type = RandRange(0, 2);
+									dialogue++;
+									max_dial = 3;
+									PlayBGM(2, 1);
+									PlaySFX(&sfx_gunshot);
+									won_game = true;
+								}
+								else
+								{
+									SetFaceAnimation(&playerFace, anim_click, sizeof(anim_click) / sizeof(anim_click[0]), 5, 0);
+									PlaySFX(&sfx_trigger);
+									shoot_gun(bullets, bulletn);
+								}
+							}
 						}
-						else if(!controlling)
+						else if(!controlling && lost_game)
 						{
 							if(fade_alpha >= 250.0f)
 							{
@@ -164,11 +212,15 @@ int main(int argc, const char* argv[])
 										tfade = true;
 										if(text_speech>=3)
 										{
+											lost_game = false;
 											text_speech = 0;
 											fade_alpha = 0.0f;
+											bullets_shooted = 0;
 											shuffle(bullets, bulletn);
 											controlling = true;
 											can_shuffle = true;
+											can_shoot_other = true;
+											com_can_shuffle = true;
 										}
 										else text_speech++;
 									}
@@ -177,6 +229,75 @@ int main(int argc, const char* argv[])
 								if(paddata.BTN_CROSS && !oldpad.BTN_CROSS && tfade) tfade = false;
 							}
 							else if(paddata.BTN_SELECT && !oldpad.BTN_SELECT) text_type = RandRange(6, 9);
+						}
+						else if(!controlling && !lost_game && !won_game)
+						{
+							static int wait_time = 0;
+							static bool can_shoot_you = true;
+							wait_time++;
+							if(wait_time > RandRange(200, 380))
+							{
+								int chance = RandRange(0, 60);
+								if(chance<15 && bullets_shooted>3 && com_can_shuffle && can_shoot_you)
+								{
+									com_can_shuffle = false;
+									shuffle(bullets, bulletn);
+								}
+								else if(chance>35 && can_shoot_you)
+								{
+									printf("Shooting you...\n");
+									can_shoot_you = false;
+									text_type = RandRange(0, 5);
+									bullets_shooted++;
+									if(bullets[0])
+									{
+										SetFaceAnimation(&playerFace, anim_dead, sizeof(anim_dead) / sizeof(anim_dead[0]), 1, 0);
+										PlaySFX(&sfx_gunshot);
+										lost_game = true;
+									}
+									else
+									{
+										SetFaceAnimation(&playerFace, anim_click, sizeof(anim_click) / sizeof(anim_click[0]), 5, 0);
+										PlaySFX(&sfx_trigger);
+										shoot_gun(bullets, bulletn);
+									}
+								}
+								else
+								{
+									printf("Shooting myself...\n");
+									bullets_shooted++;
+									can_shoot_you = true;
+									if(bullets[0])
+									{
+										SetFaceAnimation(&playerFace, anim_killed, sizeof(anim_killed) / sizeof(anim_killed[0]), 6, 0);
+										printf("I lost. Ouchie\n");
+										text_type = RandRange(0, 2);
+										dialogue++;
+										max_dial = 3;
+										PlayBGM(2, 1);
+										PlaySFX(&sfx_gunshot);
+										won_game = true;
+									}
+									else
+									{
+										SetFaceAnimation(&playerFace, anim_click, sizeof(anim_click) / sizeof(anim_click[0]), 5, 0);
+										PlaySFX(&sfx_trigger);
+										shoot_gun(bullets, bulletn);
+										controlling = true;
+									}
+								}
+								wait_time = 0;
+							}
+						}
+						else if(won_game)
+						{
+							static int t = 0;
+							t++;
+							if(t>120)
+							{
+								GameSCR = SCR_CUTS;
+								t = 0;
+							}
 						}
 					}
 					default: break;

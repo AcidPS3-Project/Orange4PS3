@@ -138,6 +138,53 @@ const char* gameover_text[] =
 	"(JUST TO AVOID CRASH IGNORE THAT)"
 };
 
+const int anim_lookdown[] = {14,15,16,17,18,19,20,40,41,42,41,42,41,42,41};
+const int anim_lookother[] = {9, 10, 11, 12, 13, 14};
+const int anim_scared[] = {22, 21, 20, 21, 22, 23};
+const int anim_click[] = {28, 29, 29, 29, 21, 22, 23};
+const int anim_shoot[] = {31, 32, 33, 34, 35};
+const int anim_dead[] = {1, 1, 2, 3, 4, 5, 6, 7, 8};
+const int anim_killed[] = {38,29,44,45,46,47,48,49,50};
+
+const int anim_scared2[] = {7, 8, 9, 10};
+const int anim_dead2[] = {0, 1, 2, 3, 4, 5, 6};
+const int anim_lookdown2[] = {11, 12, 13};
+const int anim_click2[] = {14,15,15,15,15,15,14,7};
+
+FaceAnimation playerFace = {0};
+FaceAnimation opponentFace = {0};
+
+void SetFaceAnimation(FaceAnimation *a, const int *frames, int count, int delay, int loop)
+{
+    a->frames = frames;
+    a->count = count;
+    a->position = 0;
+    a->timer = 0;
+    a->delay = delay;
+    a->loop = loop;
+    a->current_frame = frames[0];
+}
+
+void UpdateFaceAnimation(FaceAnimation *a)
+{
+    if(a->frames == 0 || a->count <= 0) return;
+
+    a->timer++;
+
+    if(a->timer < a->delay) return;
+
+    a->timer = 0;
+    a->position++;
+
+    if(a->position >= a->count)
+    {
+        if(a->loop) a->position = 0;
+        else a->position = a->count - 1;
+    }
+
+    a->current_frame = a->frames[a->position];
+}
+
 int GameSCR = 0;
 
 u32 c_white = 0xffffffff;
@@ -375,7 +422,6 @@ void drawScene()
 			DrawFString(0, 0, 192, c_orange, 0, 28, "RESPECT YOUR ORANGE.");
 			DrawFString(0, 0, 384, c_orange, 0, 28, "PRESS START");
 			SetFontAutoCenter(0);
-			drawHeat();
 			break;
 		}
     	case SCR_LOGO:
@@ -403,9 +449,9 @@ void drawScene()
 			DrawFString(0, 0, 154, c_orange, 0, 28, "ORANGE ROULETTE");
 			DrawFString(0, 0, 384, c_orange, 0, 28, "{PRESS START TO PLAY}");
 			SetFontSize(12, 14);
-			DrawFString(0, 0, 192, c_orange, 0, 14, "(PS3 Edition / V0.1)");
+			DrawFString(0, 0, 192, c_orange, 0, 14, "(PS3 Edition / V0.4)");
 			DrawFString(0, 0, 220, c_orange, 0, 14, "What's New?");
-			DrawFString(0, 0, 240, c_orange, 0, 14, "You can technically lose now lmao");
+			DrawFString(0, 0, 240, c_orange, 0, 14, "The game 40\% completed now..?");
 			SetFontAutoCenter(0);
 			DrawFString(0, 10, 450, c_orange, 0, 28, "original game by mikey houser");
 			break;
@@ -413,7 +459,7 @@ void drawScene()
     	case SCR_CUTS:
     	{
 			SetTexture(2);
-			DrawFull(600, 117, 254, 363, 0, 0xffffffff);
+			if(dialogue!=6) DrawFull(600, 117, 254, 363, 0, 0xffffffff);
 			SetFontSize(24, 28);
 			const char* text = "Pee pee poo poo";
 			
@@ -423,7 +469,12 @@ void drawScene()
 			else if(dialogue == 3) text = dialogue_4[text_speech+(max_dial*text_type)];
 			else if(dialogue == 4) text = dialogue_5[text_speech+(max_dial*text_type)];
 			else if(dialogue == 5) text = dialogue_6[text_speech+(max_dial*text_type)];
-			else if(dialogue == 6) text = dialogue_7[text_speech];
+			else if(dialogue == 6)
+			{
+				SetTexture(3);
+				DrawFull(600, 107, 240, 396, 0, 0xffffffff);
+				text = dialogue_7[text_speech];
+			}
 			
 			u32 colort = 0xffaf2200 | (u32)tfade_alpha;
 			DrawFStringC(0, 666, 167, colort, 0, 24, 28, text);
@@ -469,14 +520,28 @@ void drawScene()
 				DrawSprite2D(0, 120, 380, 73, 82, 73, 82, 365, 164, -2, c_white);
 				DrawSprite2D(0, 740, 380, -73, 82, 73, 82, 365, 164, -2, c_white);
 				
+				SetTexture(15);
+				DrawSprite2D(player_anim, 117, 120, 149, 135, 149, 135, 894, 1215, -2, c_white);
+				SetTexture(15+opponent);
+				if(opponent==ORANGE_USUAL) DrawSprite2D(opponent_anim, 744-156, 130, 156, 109, 156, 109, 624, 545, -2, c_white);
+				else if(opponent==ORANGE_CRYING) DrawSprite2D(opponent_anim, 744-156, 105, 160, 153, 160, 153, 640, 765, -2, c_white);
+				else if(opponent==ORANGE_COCKY) DrawSprite2D(opponent_anim, 744-133, 136, 140, 100, 140, 100, 700, 400, -2, c_white);
+				else if(opponent==ORANGE_LOBOTOMIZED) DrawSprite2D(opponent_anim, 744-152, 120, 152, 131, 152, 131, 608, 655, -2, c_white);
+				else if(opponent==ORANGE_CYCLOPE) DrawSprite2D(opponent_anim, 744-152, 120, 166, 121, 166, 121, 664, 605, -2, c_white);
+				else if(opponent==ORANGE_WTF) DrawSprite2D(((framexd / 2) % 3), 744-167, 130, 117, 101, 117, 101, 351, 101, -2, c_white);
+				
 				SetFontSize(24, 28);
 				SetFontAutoCenter(1);
-				DrawFString(0, 0, 318, c_black, 1, 28, "Nothing to play right now.");
-				DrawFString(0, 0, 348, c_black, 1, 28, "SQUARE - Shuffle, CROSS - Shoot");
+				if(controlling)
+				{
+					if(!can_shoot_other) DrawFString(0, 0, 348, c_black, 1, 28, "CROSS - Shoot");
+					else if(can_shuffle) DrawFString(0, 0, 348, c_black, 1, 28, "SQUARE - Shuffle, CROSS - Shoot, CIRCLE - Shoot other");
+					else DrawFString(0, 0, 348, c_black, 1, 28, "CROSS - Shoot, CIRCLE - Shoot other");
+				}
 				SetFontAutoCenter(0);
 			}
 			
-			if(!controlling)
+			if(!controlling && lost_game)
 			{
 				tg++;
 				if(tg>67)
@@ -495,13 +560,25 @@ void drawScene()
 			}
 			else tg = 0;
 			
-			drawHeat();
-			
 			SetFontSize(12, 14);
 			DrawFString(0, 0, 0, c_orange, 0, 14, "ORANGE ROULETTE: PS3 EDITION (V0.1) [RECREATED BY ACIDNT3.1 PRODUCTIONS]");
+			break;
+		}
+		case SCR_ENDS:
+		{
+			int shittyness = RandRange(0, 60);
+			int sprite = 0;
+			if(shittyness>55) sprite = 1;
+			
+			SetTexture(10);
+			DrawFull(0, 0, 854, 480, 2, 0xffffffff);
+			SetTexture(22);
+			DrawSprite2D(sprite, 398, 239, 80, 47, 80, 47, 160, 47, 1, c_white);
+			break;
 		}
 		default: break;
 	}
+	drawHeat();
 }
 
 u32 *texture_pointer = NULL;
