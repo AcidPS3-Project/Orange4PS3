@@ -146,10 +146,12 @@ const int anim_shoot[] = {31, 32, 33, 34, 35};
 const int anim_dead[] = {1, 1, 2, 3, 4, 5, 6, 7, 8};
 const int anim_killed[] = {38,29,44,45,46,47,48,49,50};
 
+const int anim_idle2[] = {7};
 const int anim_scared2[] = {7, 8, 9, 10};
 const int anim_dead2[] = {0, 1, 2, 3, 4, 5, 6};
 const int anim_lookdown2[] = {11, 12, 13};
 const int anim_click2[] = {14,15,15,15,15,15,14,7};
+const int anim_shoot2[] = {16, 17};
 
 FaceAnimation playerFace = {0};
 FaceAnimation opponentFace = {0};
@@ -449,9 +451,9 @@ void drawScene()
 			DrawFString(0, 0, 154, c_orange, 0, 28, "ORANGE ROULETTE");
 			DrawFString(0, 0, 384, c_orange, 0, 28, "{PRESS START TO PLAY}");
 			SetFontSize(12, 14);
-			DrawFString(0, 0, 192, c_orange, 0, 14, "(PS3 Edition / V0.4)");
-			DrawFString(0, 0, 220, c_orange, 0, 14, "What's New?");
-			DrawFString(0, 0, 240, c_orange, 0, 14, "The game 40\% completed now..?");
+			DrawFString(0, 0, 192, c_orange, 0, 14, "(PS3 Edition / V0.45)");
+			DrawFString(0, 0, 220, c_orange, 0, 14, "Completion state:");
+			DrawFString(0, 0, 240, c_orange, 0, 14, "45%% completed.");
 			SetFontAutoCenter(0);
 			DrawFString(0, 10, 450, c_orange, 0, 28, "original game by mikey houser");
 			break;
@@ -525,10 +527,13 @@ void drawScene()
 				SetTexture(15+opponent);
 				if(opponent==ORANGE_USUAL) DrawSprite2D(opponent_anim, 744-156, 130, 156, 109, 156, 109, 624, 545, -2, c_white);
 				else if(opponent==ORANGE_CRYING) DrawSprite2D(opponent_anim, 744-156, 105, 160, 153, 160, 153, 640, 765, -2, c_white);
-				else if(opponent==ORANGE_COCKY) DrawSprite2D(opponent_anim, 744-133, 136, 140, 100, 140, 100, 700, 400, -2, c_white);
+				else if(opponent==ORANGE_COCKY) DrawSprite2D(opponent_anim, 744-138, 136, 140, 100, 140, 100, 700, 400, -2, c_white);
 				else if(opponent==ORANGE_LOBOTOMIZED) DrawSprite2D(opponent_anim, 744-152, 120, 152, 131, 152, 131, 608, 655, -2, c_white);
 				else if(opponent==ORANGE_CYCLOPE) DrawSprite2D(opponent_anim, 744-152, 120, 166, 121, 166, 121, 664, 605, -2, c_white);
-				else if(opponent==ORANGE_WTF) DrawSprite2D(((framexd / 2) % 3), 744-167, 130, 117, 101, 117, 101, 351, 101, -2, c_white);
+				else if(opponent==ORANGE_WTF)
+				{
+					if(!won_game) DrawSprite2D(((framexd / 2) % 3), 744-160, 130, 117, 101, 117, 101, 351, 101, -2, c_white);
+				}
 				
 				SetFontSize(24, 28);
 				SetFontAutoCenter(1);
@@ -559,9 +564,6 @@ void drawScene()
 				}
 			}
 			else tg = 0;
-			
-			SetFontSize(12, 14);
-			DrawFString(0, 0, 0, c_orange, 0, 14, "ORANGE ROULETTE: PS3 EDITION (V0.1) [RECREATED BY ACIDNT3.1 PRODUCTIONS]");
 			break;
 		}
 		case SCR_ENDS:

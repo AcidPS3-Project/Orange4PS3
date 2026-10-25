@@ -127,7 +127,8 @@ int main(int argc, const char* argv[])
 										lost_game = false;
 										PlayBGM(0, 1);
 										
-										SetFaceAnimation(&playerFace, anim_lookdown, sizeof(anim_lookdown) / sizeof(anim_lookdown[0]), 5, 0);
+										SetFaceAnimation(&playerFace, anim_scared, sizeof(anim_scared) / sizeof(anim_scared[0]), 5, 1);
+										SetFaceAnimation(&opponentFace, anim_idle2, sizeof(anim_idle2) / sizeof(anim_idle2[0]), 5, 1);
 									}
 								}
 								else text_speech++;
@@ -142,7 +143,9 @@ int main(int argc, const char* argv[])
 						if(!shuffling)
 						{
 							UpdateFaceAnimation(&playerFace);
+							UpdateFaceAnimation(&opponentFace);
 							player_anim = playerFace.current_frame;
+							opponent_anim = opponentFace.current_frame;
 						}
 						
 						if(!shuffling && controlling)
@@ -156,6 +159,7 @@ int main(int argc, const char* argv[])
 								if(bullets[0])
 								{
 									SetFaceAnimation(&playerFace, anim_dead, sizeof(anim_dead) / sizeof(anim_dead[0]), 1, 0);
+									SetFaceAnimation(&opponentFace, anim_shoot2, sizeof(anim_shoot2) / sizeof(anim_shoot2[0]), 5, 0);
 									PlaySFX(&sfx_gunshot);
 									lost_game = true;
 								}
@@ -177,6 +181,7 @@ int main(int argc, const char* argv[])
 								if(bullets[0])
 								{
 									SetFaceAnimation(&playerFace, anim_killed, sizeof(anim_killed) / sizeof(anim_killed[0]), 6, 0);
+									SetFaceAnimation(&opponentFace, anim_dead2, sizeof(anim_dead2) / sizeof(anim_dead2[0]), 1, 0);
 									controlling = false;
 									printf("I lost. Ouchie\n");
 									text_type = RandRange(0, 2);
@@ -189,6 +194,7 @@ int main(int argc, const char* argv[])
 								else
 								{
 									SetFaceAnimation(&playerFace, anim_click, sizeof(anim_click) / sizeof(anim_click[0]), 5, 0);
+									SetFaceAnimation(&opponentFace, anim_scared2, sizeof(anim_scared2) / sizeof(anim_scared2[0]), 5, 0);
 									PlaySFX(&sfx_trigger);
 									shoot_gun(bullets, bulletn);
 								}
@@ -221,6 +227,9 @@ int main(int argc, const char* argv[])
 											can_shuffle = true;
 											can_shoot_other = true;
 											com_can_shuffle = true;
+											
+											SetFaceAnimation(&playerFace, anim_scared, sizeof(anim_scared) / sizeof(anim_scared[0]), 5, 1);
+											SetFaceAnimation(&opponentFace, anim_idle2, sizeof(anim_idle2) / sizeof(anim_idle2[0]), 5, 1);
 										}
 										else text_speech++;
 									}
@@ -252,6 +261,7 @@ int main(int argc, const char* argv[])
 									if(bullets[0])
 									{
 										SetFaceAnimation(&playerFace, anim_dead, sizeof(anim_dead) / sizeof(anim_dead[0]), 1, 0);
+										SetFaceAnimation(&opponentFace, anim_shoot2, sizeof(anim_shoot2) / sizeof(anim_shoot2[0]), 5, 0);
 										PlaySFX(&sfx_gunshot);
 										lost_game = true;
 									}
@@ -270,6 +280,7 @@ int main(int argc, const char* argv[])
 									if(bullets[0])
 									{
 										SetFaceAnimation(&playerFace, anim_killed, sizeof(anim_killed) / sizeof(anim_killed[0]), 6, 0);
+										SetFaceAnimation(&opponentFace, anim_dead2, sizeof(anim_dead2) / sizeof(anim_dead2[0]), 1, 0);
 										printf("I lost. Ouchie\n");
 										text_type = RandRange(0, 2);
 										dialogue++;
@@ -280,6 +291,7 @@ int main(int argc, const char* argv[])
 									}
 									else
 									{
+										SetFaceAnimation(&opponentFace, anim_click2, sizeof(anim_click2) / sizeof(anim_click2[0]), 5, 0);
 										SetFaceAnimation(&playerFace, anim_click, sizeof(anim_click) / sizeof(anim_click[0]), 5, 0);
 										PlaySFX(&sfx_trigger);
 										shoot_gun(bullets, bulletn);

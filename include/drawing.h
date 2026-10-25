@@ -31,6 +31,13 @@ extern const int anim_shoot[5];
 extern const int anim_dead[9];
 extern const int anim_killed[9];
 
+extern const int anim_idle2[1];
+extern const int anim_scared2[4];
+extern const int anim_dead2[7];
+extern const int anim_lookdown2[3];
+extern const int anim_click2[8];
+extern const int anim_shoot2[2];
+
 extern FaceAnimation playerFace;
 extern FaceAnimation opponentFace;
 
