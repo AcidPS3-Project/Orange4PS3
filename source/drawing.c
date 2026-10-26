@@ -452,8 +452,6 @@ void drawScene()
 			DrawFString(0, 0, 384, c_orange, 0, 28, "{PRESS START TO PLAY}");
 			SetFontSize(12, 14);
 			DrawFString(0, 0, 192, c_orange, 0, 14, "(PS3 Edition / V0.45)");
-			DrawFString(0, 0, 220, c_orange, 0, 14, "Completion state:");
-			DrawFString(0, 0, 240, c_orange, 0, 14, "45%% completed.");
 			SetFontAutoCenter(0);
 			DrawFString(0, 10, 450, c_orange, 0, 28, "original game by mikey houser");
 			break;
@@ -523,16 +521,16 @@ void drawScene()
 				DrawSprite2D(0, 740, 380, -73, 82, 73, 82, 365, 164, -2, c_white);
 				
 				SetTexture(15);
-				DrawSprite2D(player_anim, 117, 120, 149, 135, 149, 135, 894, 1215, -2, c_white);
+				DrawSprite2D(player_anim, 117+face_x1, 120, 149, 135, 149, 135, 894, 1215, -2, c_white);
 				SetTexture(15+opponent);
-				if(opponent==ORANGE_USUAL) DrawSprite2D(opponent_anim, 744-156, 130, 156, 109, 156, 109, 624, 545, -2, c_white);
-				else if(opponent==ORANGE_CRYING) DrawSprite2D(opponent_anim, 744-156, 105, 160, 153, 160, 153, 640, 765, -2, c_white);
-				else if(opponent==ORANGE_COCKY) DrawSprite2D(opponent_anim, 744-138, 136, 140, 100, 140, 100, 700, 400, -2, c_white);
-				else if(opponent==ORANGE_LOBOTOMIZED) DrawSprite2D(opponent_anim, 744-152, 120, 152, 131, 152, 131, 608, 655, -2, c_white);
-				else if(opponent==ORANGE_CYCLOPE) DrawSprite2D(opponent_anim, 744-152, 120, 166, 121, 166, 121, 664, 605, -2, c_white);
+				if(opponent==ORANGE_USUAL) DrawSprite2D(opponent_anim, 744-156+face_x2, 130, 156, 109, 156, 109, 624, 545, -2, c_white);
+				else if(opponent==ORANGE_CRYING) DrawSprite2D(opponent_anim, 744-156+face_x2, 105, 160, 153, 160, 153, 640, 765, -2, c_white);
+				else if(opponent==ORANGE_COCKY) DrawSprite2D(opponent_anim, 744-146+face_x2, 136, 140, 100, 140, 100, 700, 400, -2, c_white);
+				else if(opponent==ORANGE_LOBOTOMIZED) DrawSprite2D(opponent_anim, 744-152+face_x2, 120, 152, 131, 152, 131, 608, 655, -2, c_white);
+				else if(opponent==ORANGE_CYCLOPE) DrawSprite2D(opponent_anim, 744-152+face_x2, 120, 166, 121, 166, 121, 664, 605, -2, c_white);
 				else if(opponent==ORANGE_WTF)
 				{
-					if(!won_game) DrawSprite2D(((framexd / 2) % 3), 744-160, 130, 117, 101, 117, 101, 351, 101, -2, c_white);
+					if(!won_game) DrawSprite2D(((framexd / 2) % 3), 744-160+face_x2, 130, 117, 101, 117, 101, 351, 101, -2, c_white);
 				}
 				
 				SetFontSize(24, 28);
@@ -573,9 +571,11 @@ void drawScene()
 			if(shittyness>55) sprite = 1;
 			
 			SetTexture(10);
-			DrawFull(0, 0, 854, 480, 2, 0xffffffff);
+			DrawFull(0, 0, 854, 480, 2, c_white);
 			SetTexture(22);
 			DrawSprite2D(sprite, 398, 239, 80, 47, 80, 47, 160, 47, 1, c_white);
+			SetTexture(23);
+			DrawFull((854/2)-(167/2), 167, 254, 39, 0, c_white);
 			break;
 		}
 		default: break;

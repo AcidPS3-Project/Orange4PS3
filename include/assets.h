@@ -25,6 +25,7 @@
 #include "orange_f6_bin.h"
 #include "orange_f7_bin.h"
 #include "orange_fend_bin.h"
+#include "end_bin.h"
 
 //IMPORT SFX
 #include "cylinder_bin.h"

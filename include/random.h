@@ -54,6 +54,9 @@ extern bool can_shuffle;
 extern bool can_shoot_other;
 extern bool com_can_shuffle;
 
+extern int face_x1;
+extern int face_x2;
+
 extern float fade_alpha;
 extern float tfade_alpha;
 extern bool tfade;

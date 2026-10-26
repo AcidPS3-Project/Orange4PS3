@@ -17,6 +17,9 @@ static u64 last_time = 0;
 
 int com_action = COM_ACT_NONE;
 
+int face_x1 = 0;
+int face_x2 = -15;
+
 int text_speech = 0;
 int text_type = 0;
 int dialogue = 0;
@@ -173,6 +176,7 @@ void Load_PNG()
 	pngLoadFromBuffer(orange_f6_bin, orange_f6_bin_size, &spritesheet[20]);
 	pngLoadFromBuffer(orange_f7_bin, orange_f7_bin_size, &spritesheet[21]);
 	pngLoadFromBuffer(orange_fend_bin, orange_fend_bin_size, &spritesheet[22]);
+	pngLoadFromBuffer(end_bin, end_bin_size, &spritesheet[23]);
 	//pngLoadFromBuffer(_bin, _bin_size, &spritesheet[]);
 }
 
